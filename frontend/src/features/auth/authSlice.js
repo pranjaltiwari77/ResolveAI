@@ -22,7 +22,7 @@ export const registerUser = createAsyncThunk('auth/register', async (userData, {
     const response = await api.post('/auth/register', userData);
     return response.data;
   } catch (err) {
-    return rejectWithValue(err.response?.data || err.response?.data?.message || 'Registration failed');
+    return rejectWithValue(err.response?.data?.message || 'Registration failed');
   }
 });
 
