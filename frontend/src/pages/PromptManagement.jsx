@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import api from '../services/api';
 import { useSelector } from 'react-redux';
 import AlertModal from '../components/ui/AlertModal';
 
@@ -27,9 +27,7 @@ const PromptManagement = () => {
 
   const fetchPrompts = async () => {
     try {
-      const res = await axios.get('/api/prompts', {
-        headers: { Authorization: `Bearer ${token}` }
-      });
+      const res = await api.get('/prompts');
       setPrompts(res.data);
     } catch (err) {
       console.error(err);
@@ -41,9 +39,7 @@ const PromptManagement = () => {
   const handleCreate = async (e) => {
     e.preventDefault();
     try {
-      await axios.post('/api/prompts', form, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
+      await api.post('/prompts', form);
       setShowModal(false);
       fetchPrompts();
     } catch (err) {
@@ -53,9 +49,7 @@ const PromptManagement = () => {
 
   const handleActivate = async (id) => {
     try {
-      await axios.post(`/api/prompts/${id}/activate`, {}, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
+      await api.post(`/prompts/${id}/activate`);
       fetchPrompts();
     } catch (err) {
       setAlertData({ isOpen: true, title: 'Error', message: 'Failed to activate prompt', type: 'error' });

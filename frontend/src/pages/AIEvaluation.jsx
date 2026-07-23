@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import api from '../services/api';
 import { useSelector } from 'react-redux';
 import AlertModal from '../components/ui/AlertModal';
 import ConfirmModal from '../components/ui/ConfirmModal';
@@ -19,8 +19,8 @@ const AIEvaluation = () => {
   const fetchData = async () => {
     try {
       const [runsRes, casesRes] = await Promise.all([
-        axios.get('/api/evaluations/runs', { headers: { Authorization: `Bearer ${token}` } }),
-        axios.get('/api/evaluations/cases', { headers: { Authorization: `Bearer ${token}` } })
+        api.get('/evaluations/runs'),
+        api.get('/evaluations/cases')
       ]);
       setRuns(runsRes.data);
       setCases(casesRes.data);
@@ -38,9 +38,7 @@ const AIEvaluation = () => {
   const executeRun = async () => {
     setShowConfirm(false);
     try {
-      await axios.post('/api/evaluations/run', {}, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
+      await api.post('/evaluations/run');
       setAlertData({ isOpen: true, title: 'Success', message: 'Evaluation completed successfully!', type: 'success' });
       fetchData();
     } catch (err) {
