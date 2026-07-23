@@ -26,18 +26,17 @@ const server = http.createServer(app);
 // Initialize Socket.io
 initSockets(server);
 
-// Allow all localhost origins (covers any Vite port)
+// Allow any origin dynamically so the Vercel frontend can connect
 app.use(cors({
-  origin: (origin, callback) => {
-    // Allow requests with no origin (e.g. curl, Postman) and any localhost port
-    if (!origin || /^http:\/\/localhost:\d+$/.test(origin)) {
-      return callback(null, true);
-    }
-    callback(new Error('Not allowed by CORS'));
-  },
+  origin: true,
   credentials: true,
 }));
 app.use(express.json());
+
+// Health Check Route
+app.get('/', (req, res) => {
+  res.status(200).json({ message: 'ResolveAI API is running successfully!' });
+});
 
 // Routes
 app.use('/api/auth', authRoutes);
