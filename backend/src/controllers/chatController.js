@@ -2,6 +2,7 @@ const Conversation = require('../models/Conversation');
 const Message = require('../models/Message');
 const Ticket = require('../models/Ticket');
 const { generateAnswerStream } = require('../services/ragService');
+const { getIo } = require('../services/socketService');
 
 exports.createConversation = async (req, res) => {
   try {
@@ -144,6 +145,9 @@ exports.escalateConversation = async (req, res) => {
     });
 
     await ticket.save();
+
+    // Emit global push notification
+    getIo().emit('ticket_created', ticket);
 
     res.status(201).json({ message: 'Escalated to ticket successfully', ticketId: ticket._id });
   } catch (error) {

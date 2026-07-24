@@ -1,5 +1,6 @@
 const Ticket = require('../models/Ticket');
 const { checkBreach, PRIORITY_ESCALATION } = require('../services/slaService');
+const { getIo } = require('../services/socketService');
 
 const OPEN_STATUSES = ['open', 'in-progress'];
 const CHECK_INTERVAL_MS = 5 * 60 * 1000; // Every 5 minutes
@@ -45,6 +46,14 @@ const runSLACheck = async () => {
 
       if (changed) {
         await Ticket.findByIdAndUpdate(ticket._id, { $set: updates });
+        if (updates['sla.resolutionBreach'] || updates['sla.responseBreach']) {
+          // Wrap in try-catch in case socket.io isn't initialized yet
+          try {
+            getIo().emit('sla_breach', { ticketId: ticket._id });
+          } catch (e) {
+            console.log('[SLA Worker] Could not emit sla_breach, socket not ready');
+          }
+        }
       }
     }
 
