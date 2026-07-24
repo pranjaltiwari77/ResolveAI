@@ -5,6 +5,8 @@ import { logout } from '../../features/auth/authSlice';
 import Sidebar from './Sidebar';
 import CommandPalette from '../ui/CommandPalette';
 import CustomerTopNav from './CustomerTopNav';
+import { Toaster, toast } from 'react-hot-toast';
+import { socket } from '../../services/socket';
 
 const AppLayout = () => {
   const { user } = useSelector(state => state.auth);
@@ -25,6 +27,35 @@ const AppLayout = () => {
     };
     window.addEventListener('keydown', handleKey);
     return () => window.removeEventListener('keydown', handleKey);
+  }, [user]);
+
+  // Global socket connection for push notifications
+  useEffect(() => {
+    if (user?.role !== 'customer') {
+      socket.connect();
+      
+      const handleNewTicket = (ticket) => {
+        toast(`New Ticket Created: ${ticket.title || 'Support Request'}`, {
+          icon: '🎫',
+          style: { background: 'rgba(30, 41, 59, 0.9)', color: '#fff', border: '1px solid rgba(255,255,255,0.1)', backdropFilter: 'blur(10px)' }
+        });
+      };
+      
+      const handleSlaBreach = (data) => {
+        toast.error(`SLA Breach: Ticket #${data.ticketId.slice(-4)} requires attention!`, {
+          icon: '🚨',
+          style: { background: 'rgba(239, 68, 68, 0.9)', color: '#fff', border: '1px solid rgba(255,255,255,0.1)', backdropFilter: 'blur(10px)' }
+        });
+      };
+
+      socket.on('ticket_created', handleNewTicket);
+      socket.on('sla_breach', handleSlaBreach);
+
+      return () => {
+        socket.off('ticket_created', handleNewTicket);
+        socket.off('sla_breach', handleSlaBreach);
+      };
+    }
   }, [user]);
 
   // Strict route protection: force customers to stay on the chat portal, ticket details, or help center
@@ -54,6 +85,9 @@ const AppLayout = () => {
 
       {/* Global Command Palette */}
       <CommandPalette open={cmdOpen} onClose={() => setCmdOpen(false)} />
+      
+      {/* Global Push Notifications Toaster */}
+      <Toaster position="top-right" />
     </div>
   );
 };
