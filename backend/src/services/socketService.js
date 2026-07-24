@@ -5,12 +5,7 @@ let io;
 const initSockets = (server) => {
   io = new Server(server, {
     cors: {
-      origin: (origin, callback) => {
-        if (!origin || /^http:\/\/localhost:\d+$/.test(origin)) {
-          return callback(null, true);
-        }
-        callback(new Error('Not allowed by CORS'));
-      },
+      origin: true,
       methods: ['GET', 'POST', 'PUT', 'DELETE'],
       credentials: true
     }

@@ -32,6 +32,7 @@ const AppLayout = () => {
   // Global socket connection for push notifications
   useEffect(() => {
     if (user?.role !== 'customer') {
+      toast.success('Notifications Active');
       socket.connect();
       
       const handleNewTicket = (ticket) => {
