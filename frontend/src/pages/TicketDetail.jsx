@@ -218,7 +218,7 @@ const TicketDetail = () => {
         <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
           
           {/* Main Content */}
-          <div className="section-card">
+          <div className="section-card" style={{ padding: '1.5rem' }}>
             <h3 style={{ fontSize: '0.9rem', color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '0.75rem' }}>Description</h3>
             <p style={{ whiteSpace: 'pre-wrap', lineHeight: 1.6, color: 'var(--text-primary)' }}>{ticket.description}</p>
             
@@ -233,7 +233,7 @@ const TicketDetail = () => {
           </div>
 
           {/* Activity Feed */}
-          <div className="section-card">
+          <div className="section-card" style={{ padding: '1.5rem' }}>
             <h3 style={{ fontSize: '0.9rem', color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '1rem' }}>Activity Feed</h3>
             
             <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', marginBottom: '1.5rem' }}>
