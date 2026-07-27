@@ -62,11 +62,11 @@
   --pink:   #ec4899;
 
   /* Spacing / radius */
-  --radius-sm:  8px;
-  --radius-md: 14px;
-  --radius-lg: 20px;
-  --radius-xl: 28px;
-  --sidebar-w: 248px;
+  --radius-sm:  12px;
+  --radius-md: 18px;
+  --radius-lg: 24px;
+  --radius-xl: 32px;
+  --sidebar-w: 260px;
 
   /* Shadows */
   --shadow-sm:   0 1px 3px rgba(0,0,0,0.4);
@@ -309,10 +309,10 @@ a { text-decoration: none; color: inherit; }
    Page
 ───────────────────────────────────────── */
 .page {
-  padding: 32px;
+  padding: 40px;
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: 32px;
   max-width: 1280px;
 }
 
@@ -346,9 +346,9 @@ a { text-decoration: none; color: inherit; }
   background: var(--bg-card);
   border: 1px solid var(--border);
   border-radius: var(--radius-md);
-  padding: 20px;
+  padding: 24px;
   display: flex;
-  gap: 16px;
+  gap: 20px;
   align-items: flex-start;
   transition: transform 0.2s, box-shadow 0.2s;
 }
@@ -385,7 +385,7 @@ a { text-decoration: none; color: inherit; }
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 20px 24px 16px;
+  padding: 24px 28px 20px;
   border-bottom: 1px solid var(--border);
 }
 
@@ -425,9 +425,9 @@ a { text-decoration: none; color: inherit; }
 
 .table-row-clickable { cursor: pointer; }
 
-.data-table td { padding: 13px 16px; vertical-align: middle; }
+.data-table td { padding: 16px 20px; vertical-align: middle; }
 
-.ticket-id { font-family: monospace; font-size: 12px; color: var(--text-muted); }
+.ticket-id { font-family: monospace; font-size: 13px; color: var(--text-muted); }
 .ticket-title { color: var(--text-primary); font-weight: 500; max-width: 300px; }
 .ticket-agent { color: var(--text-secondary); font-size: 13px; }
 .ticket-date { color: var(--text-muted); font-size: 12px; }
@@ -517,10 +517,10 @@ a { text-decoration: none; color: inherit; }
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 6px;
-  padding: 9px 18px;
+  gap: 8px;
+  padding: 12px 24px;
   border-radius: var(--radius-sm);
-  font-size: 14px;
+  font-size: 14.5px;
   font-weight: 600;
   cursor: pointer;
   border: none;
@@ -556,7 +556,7 @@ a { text-decoration: none; color: inherit; }
 }
 
 .btn-full { width: 100%; }
-.btn-sm { padding: 6px 12px; font-size: 12px; }
+.btn-sm { padding: 8px 16px; font-size: 12.5px; }
 
 /* ─────────────────────────────────────────
    Filter Bar
