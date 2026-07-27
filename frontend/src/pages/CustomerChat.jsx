@@ -480,19 +480,71 @@ const CustomerChat = () => {
                 </div>
 
                 {/* Input Area */}
-                <div className="chat-input-area">
-                  <form onSubmit={handleSendMessage} className="chat-input-wrapper" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                    <div style={{ position: 'relative', flex: 1, display: 'flex', alignItems: 'center' }}>
-                      <input 
-                        type="text" 
-                        placeholder="Ask a question based on your documents or say 'I need a refund'..." 
-                        value={inputValue}
-                        onChange={e => setInputValue(e.target.value)}
-                        disabled={isStreaming}
-                        style={{ width: '100%' }}
-                      />
-                    </div>
-                    <button type="submit" className="btn-send" disabled={isStreaming || !inputValue.trim()} style={{ flexShrink: 0 }}>
+                <div style={{ marginTop: '1rem' }}>
+                  <form 
+                    onSubmit={handleSendMessage} 
+                    style={{ 
+                      display: 'flex', 
+                      alignItems: 'center', 
+                      background: 'rgba(255, 255, 255, 0.03)', 
+                      border: '1px solid rgba(255, 255, 255, 0.08)',
+                      borderRadius: '999px',
+                      padding: '6px 6px 6px 20px',
+                      transition: 'border-color 0.2s ease, background 0.2s ease',
+                      boxShadow: '0 4px 20px rgba(0, 0, 0, 0.1)'
+                    }}
+                    onFocus={(e) => {
+                      e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.2)';
+                      e.currentTarget.style.background = 'rgba(255, 255, 255, 0.05)';
+                    }}
+                    onBlur={(e) => {
+                      e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.08)';
+                      e.currentTarget.style.background = 'rgba(255, 255, 255, 0.03)';
+                    }}
+                  >
+                    <input 
+                      type="text" 
+                      placeholder="Ask a question based on your documents or say 'I need a refund'..." 
+                      value={inputValue}
+                      onChange={e => setInputValue(e.target.value)}
+                      disabled={isStreaming}
+                      style={{ 
+                        flex: 1,
+                        background: 'transparent',
+                        border: 'none',
+                        outline: 'none',
+                        color: 'var(--text-primary)',
+                        fontSize: '0.95rem',
+                        padding: '10px 0',
+                        width: '100%'
+                      }}
+                    />
+                    <button 
+                      type="submit" 
+                      disabled={isStreaming || !inputValue.trim()} 
+                      style={{ 
+                        flexShrink: 0,
+                        background: 'rgba(255, 255, 255, 0.08)',
+                        color: 'rgba(255, 255, 255, 0.6)',
+                        border: 'none',
+                        borderRadius: '999px',
+                        padding: '10px 24px',
+                        fontSize: '0.9rem',
+                        fontWeight: 500,
+                        cursor: (isStreaming || !inputValue.trim()) ? 'not-allowed' : 'pointer',
+                        transition: 'all 0.2s ease',
+                      }}
+                      onMouseOver={(e) => {
+                        if (!isStreaming && inputValue.trim()) {
+                          e.currentTarget.style.background = 'rgba(255, 255, 255, 0.15)';
+                          e.currentTarget.style.color = 'rgba(255, 255, 255, 0.9)';
+                        }
+                      }}
+                      onMouseOut={(e) => {
+                        e.currentTarget.style.background = 'rgba(255, 255, 255, 0.08)';
+                        e.currentTarget.style.color = 'rgba(255, 255, 255, 0.6)';
+                      }}
+                    >
                       Send
                     </button>
                   </form>
