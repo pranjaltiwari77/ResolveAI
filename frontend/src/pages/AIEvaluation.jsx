@@ -59,12 +59,12 @@ const AIEvaluation = () => {
       </div>
 
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem', marginBottom: '2rem' }}>
-        <div className="section-card">
+        <div className="section-card" style={{ padding: '1.5rem' }}>
           <h3 style={{ margin: '0 0 0.5rem', color: 'var(--text-primary)' }}>Test Cases</h3>
           <p style={{ fontSize: '2.5rem', fontWeight: 800, margin: 0, color: '#10b981' }}>{cases.length}</p>
           <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem', margin: 0 }}>Active evaluation scenarios</p>
         </div>
-        <div className="section-card">
+        <div className="section-card" style={{ padding: '1.5rem' }}>
           <h3 style={{ margin: '0 0 0.5rem', color: 'var(--text-primary)' }}>Total Runs</h3>
           <p style={{ fontSize: '2.5rem', fontWeight: 800, margin: 0, color: '#6366f1' }}>{runs.length}</p>
           <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem', margin: 0 }}>Historical evaluation executions</p>

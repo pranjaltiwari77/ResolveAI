@@ -103,7 +103,7 @@ const DataSources = () => {
       {/* Main Content for Documents */}
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
         {showCreateKb ? (
-          <div className="section-card">
+          <div className="section-card" style={{ padding: '1.5rem' }}>
             <h2 style={{ marginBottom: '1rem' }}>Create Knowledge Base</h2>
             <form onSubmit={handleCreateKb} className="auth-form" style={{ marginTop: 0, maxWidth: '400px' }}>
               <div className="form-group">
@@ -130,7 +130,7 @@ const DataSources = () => {
             </div>
 
             {/* Upload Area */}
-            <div className="section-card" style={{ marginBottom: '2rem' }}>
+            <div className="section-card" style={{ marginBottom: '2rem', padding: '1.5rem' }}>
               <form onSubmit={handleUpload} style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
                 <input 
                   id="file-upload"

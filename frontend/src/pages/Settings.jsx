@@ -113,7 +113,7 @@ const Settings = () => {
 
       {/* --- PROFILE TAB --- */}
       {activeTab === 'profile' && profile && (
-        <div className="section-card" style={{ maxWidth: 600 }}>
+        <div className="section-card" style={{ maxWidth: 600, padding: '1.5rem' }}>
           <h2 style={{ fontSize: '1.1rem', marginBottom: '1.5rem' }}>Profile Information</h2>
           <form onSubmit={handleProfileUpdate} className="auth-form" style={{ padding: 0 }}>
             <div className="form-group">
@@ -161,7 +161,7 @@ const Settings = () => {
       {activeTab === 'team' && isAdmin && (
         <div style={{ display: 'grid', gap: '1.5rem', gridTemplateColumns: '1fr 350px' }}>
           
-          <div className="section-card">
+          <div className="section-card" style={{ padding: '1.5rem' }}>
             <h2 style={{ fontSize: '1.1rem', marginBottom: '1rem' }}>Team Members ({team.length})</h2>
             <div className="table-wrapper">
               <table className="data-table">
@@ -218,7 +218,7 @@ const Settings = () => {
             </div>
           </div>
 
-          <div className="section-card" style={{ alignSelf: 'start' }}>
+          <div className="section-card" style={{ alignSelf: 'start', padding: '1.5rem' }}>
             <h2 style={{ fontSize: '1.1rem', marginBottom: '1rem' }}>Invite Member</h2>
             <form onSubmit={handleInvite} className="auth-form" style={{ padding: 0 }}>
               <div className="form-group">
@@ -264,7 +264,7 @@ const Settings = () => {
 
       {/* --- ORGANIZATION TAB --- */}
       {activeTab === 'org' && isAdmin && org && (
-        <div className="section-card" style={{ maxWidth: 600 }}>
+        <div className="section-card" style={{ maxWidth: 600, padding: '1.5rem' }}>
           <h2 style={{ fontSize: '1.1rem', marginBottom: '1.5rem' }}>Organization Settings</h2>
           <form onSubmit={handleOrgUpdate} className="auth-form" style={{ padding: 0 }}>
             <div className="form-group">
@@ -292,7 +292,7 @@ const Settings = () => {
       {activeTab === 'ai' && isAdmin && (
         <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
           
-          <div className="section-card">
+          <div className="section-card" style={{ padding: '1.5rem' }}>
             <h2 style={{ fontSize: '1.1rem', marginBottom: '0.5rem' }}>Customer Chat AI Instructions</h2>
             <p style={{ fontSize: '0.9rem', color: 'var(--text-muted)', marginBottom: '1rem' }}>Configure how the customer-facing AI behaves, its tone, and fallback behaviors.</p>
             <form onSubmit={(e) => { e.preventDefault(); dispatch(updatePrompt({ type: 'chat', instruction: aiPrompts.chat })); }} className="auth-form" style={{ padding: 0 }}>
@@ -311,7 +311,7 @@ const Settings = () => {
             </form>
           </div>
 
-          <div className="section-card">
+          <div className="section-card" style={{ padding: '1.5rem' }}>
             <h2 style={{ fontSize: '1.1rem', marginBottom: '0.5rem' }}>Ticket Triage AI Instructions</h2>
             <p style={{ fontSize: '0.9rem', color: 'var(--text-muted)', marginBottom: '1rem' }}>Configure how incoming tickets are categorized and prioritized by the AI.</p>
             <form onSubmit={(e) => { e.preventDefault(); dispatch(updatePrompt({ type: 'triage', instruction: aiPrompts.triage })); }} className="auth-form" style={{ padding: 0 }}>

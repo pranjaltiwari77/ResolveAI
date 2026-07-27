@@ -70,7 +70,7 @@ const PromptManagement = () => {
       </div>
 
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '1.5rem', marginBottom: '2rem' }}>
-        <div className="section-card">
+        <div className="section-card" style={{ padding: '1.5rem' }}>
           <h3 style={{ margin: '0 0 1rem', color: 'var(--text-primary)' }}>Active Chat Prompt</h3>
           {activeChatPrompt ? (
             <div>
@@ -83,7 +83,7 @@ const PromptManagement = () => {
           ) : <p className="text-muted">No active chat prompt.</p>}
         </div>
 
-        <div className="section-card">
+        <div className="section-card" style={{ padding: '1.5rem' }}>
           <h3 style={{ margin: '0 0 1rem', color: 'var(--text-primary)' }}>Active Triage Prompt</h3>
           {activeTriagePrompt ? (
             <div>
