@@ -52,9 +52,16 @@ const AppLayout = () => {
       socket.on('ticket_created', handleNewTicket);
       socket.on('sla_breach', handleSlaBreach);
 
+      socket.on('connect', () => console.log('✅ Socket connected to backend!', socket.id));
+      socket.on('connect_error', (err) => console.error('❌ Socket connection error:', err));
+      socket.on('disconnect', (reason) => console.log('❌ Socket disconnected:', reason));
+
       return () => {
         socket.off('ticket_created', handleNewTicket);
         socket.off('sla_breach', handleSlaBreach);
+        socket.off('connect');
+        socket.off('connect_error');
+        socket.off('disconnect');
       };
     }
   }, [user]);

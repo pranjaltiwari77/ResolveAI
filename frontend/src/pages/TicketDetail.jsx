@@ -331,46 +331,70 @@ const TicketDetail = () => {
               )}
             </div>
 
-            <form onSubmit={handleAddComment}>
+            <form onSubmit={handleAddComment} style={{
+              background: 'var(--bg-surface)',
+              border: '1px solid var(--border)',
+              borderRadius: 'var(--radius-lg)',
+              overflow: 'hidden',
+              boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
+              display: 'flex',
+              flexDirection: 'column'
+            }}>
               {!isCustomer && (
-                <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '0.5rem' }}>
+                <div style={{ 
+                  display: 'flex', 
+                  gap: '0.25rem', 
+                  padding: '0.75rem 1rem',
+                  borderBottom: '1px solid var(--border)',
+                  background: 'rgba(0,0,0,0.1)'
+                }}>
                   <button 
                     type="button" 
                     onClick={() => setReplyType('internal')}
                     style={{ 
-                      padding: '6px 12px', 
-                      fontSize: '0.8rem',
+                      padding: '6px 14px', 
+                      fontSize: '0.85rem',
                       fontWeight: 600,
-                      borderRadius: 'var(--radius-sm)',
+                      borderRadius: '9999px',
                       border: 'none',
-                      background: replyType === 'internal' ? '#fef3c7' : 'transparent',
-                      color: replyType === 'internal' ? '#b45309' : 'var(--text-secondary)',
-                      cursor: 'pointer'
+                      background: replyType === 'internal' ? 'rgba(245, 158, 11, 0.15)' : 'transparent',
+                      color: replyType === 'internal' ? '#fbbf24' : 'var(--text-secondary)',
+                      cursor: 'pointer',
+                      transition: 'all 0.2s ease',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '6px'
                     }}
                   >
-                    🔒 Internal Note
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                    Internal Note
                   </button>
                   <button 
                     type="button" 
                     onClick={() => setReplyType('public')}
                     style={{ 
-                      padding: '6px 12px', 
-                      fontSize: '0.8rem',
+                      padding: '6px 14px', 
+                      fontSize: '0.85rem',
                       fontWeight: 600,
-                      borderRadius: 'var(--radius-sm)',
+                      borderRadius: '9999px',
                       border: 'none',
-                      background: replyType === 'public' ? '#d1fae5' : 'transparent',
-                      color: replyType === 'public' ? '#047857' : 'var(--text-secondary)',
-                      cursor: 'pointer'
+                      background: replyType === 'public' ? 'rgba(16, 185, 129, 0.15)' : 'transparent',
+                      color: replyType === 'public' ? '#10b981' : 'var(--text-secondary)',
+                      cursor: 'pointer',
+                      transition: 'all 0.2s ease',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '6px'
                     }}
                   >
-                    ✉️ Public Reply
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+                    Public Reply
                   </button>
                 </div>
               )}
 
               {typingUsers.length > 0 && (
-                <div style={{ fontSize: '0.8rem', color: 'var(--indigo-400)', marginBottom: '0.5rem', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                <div style={{ padding: '0.5rem 1rem 0', fontSize: '0.8rem', color: 'var(--indigo-400)', display: 'flex', alignItems: 'center', gap: '6px' }}>
                   <span style={{ display: 'flex', gap: '2px' }}>
                     <span style={{ display: 'inline-block', width: '4px', height: '4px', borderRadius: '50%', background: 'currentColor', animation: 'pulse 1s infinite' }}></span>
                     <span style={{ display: 'inline-block', width: '4px', height: '4px', borderRadius: '50%', background: 'currentColor', animation: 'pulse 1s infinite 0.2s' }}></span>
@@ -381,19 +405,33 @@ const TicketDetail = () => {
               )}
 
               <textarea 
-                className="form-input" 
                 rows="4" 
                 placeholder={isCustomer ? "Write a reply..." : (replyType === 'internal' ? "Add a private note for your team..." : "Draft a reply to the customer...")}
                 value={commentText}
                 onChange={handleCommentChange}
                 style={{ 
-                  marginBottom: '1rem', 
-                  border: isCustomer || replyType === 'public' ? '1px solid #10b981' : '1px solid var(--border)',
-                  background: isCustomer || replyType === 'public' ? 'rgba(16, 185, 129, 0.02)' : 'var(--bg-input)'
+                  width: '100%',
+                  padding: '1rem',
+                  border: 'none',
+                  outline: 'none',
+                  resize: 'vertical',
+                  minHeight: '100px',
+                  background: 'transparent',
+                  color: 'var(--text-primary)',
+                  fontSize: '0.95rem',
+                  fontFamily: 'inherit',
+                  lineHeight: '1.5'
                 }}
               />
               
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
+              <div style={{ 
+                display: 'flex', 
+                justifyContent: 'space-between', 
+                alignItems: 'center', 
+                padding: '0.75rem 1rem',
+                borderTop: '1px solid var(--border)',
+                background: 'rgba(0,0,0,0.1)'
+              }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
                   <input 
                     type="file" 
@@ -404,49 +442,95 @@ const TicketDetail = () => {
                   <button 
                     type="button"
                     onClick={() => fileInputRef.current.click()}
-                    style={{ background: 'transparent', border: '1px solid var(--border)', padding: '6px 12px', borderRadius: '20px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px' }}
-                  >
-                    📎 {selectedFile ? 'Change File' : 'Attach File'}
-                  </button>
-                </div>
-                
-                <div style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>
-                  {selectedFile && <span>Attached: {selectedFile.name} <button type="button" onClick={() => setSelectedFile(null)} style={{ border: 'none', background: 'none', color: '#ef4444', cursor: 'pointer', padding: '0 4px' }}>x</button></span>}
-                </div>
-              </div>
-
-              <div style={{ display: 'flex', justifyContent: isCustomer ? 'flex-end' : 'space-between', alignItems: 'center' }}>
-                {!isCustomer && (
-                  <button 
-                    type="button" 
-                    className="btn" 
                     style={{ 
-                      background: 'linear-gradient(135deg, #8b5cf6, #ec4899)', 
-                      color: 'white', 
+                      background: 'transparent', 
+                      border: '1px solid var(--border)', 
+                      padding: '6px 12px', 
+                      borderRadius: '9999px', 
+                      cursor: 'pointer', 
+                      display: 'flex', 
+                      alignItems: 'center', 
+                      gap: '6px',
+                      color: 'var(--text-secondary)',
+                      fontSize: '0.85rem',
+                      fontWeight: 500,
+                      transition: 'all 0.2s ease'
+                    }}
+                    onMouseOver={(e) => { e.currentTarget.style.color = 'var(--text-primary)'; e.currentTarget.style.borderColor = 'var(--text-secondary)'; }}
+                    onMouseOut={(e) => { e.currentTarget.style.color = 'var(--text-secondary)'; e.currentTarget.style.borderColor = 'var(--border)'; }}
+                  >
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"></path></svg>
+                    {selectedFile ? 'Change File' : 'Attach File'}
+                  </button>
+                  {selectedFile && (
+                    <div style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                      <span style={{ maxWidth: '150px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{selectedFile.name}</span>
+                      <button type="button" onClick={() => setSelectedFile(null)} style={{ border: 'none', background: 'none', color: '#ef4444', cursor: 'pointer', padding: '2px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                      </button>
+                    </div>
+                  )}
+                </div>
+
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                  {!isCustomer && (
+                    <button 
+                      type="button" 
+                      onClick={handleGenerateDraft}
+                      disabled={draftLoading}
+                      style={{ 
+                        background: 'linear-gradient(135deg, #8b5cf6, #ec4899)', 
+                        color: 'white', 
+                        border: 'none',
+                        padding: '8px 16px',
+                        borderRadius: '9999px',
+                        fontSize: '0.85rem',
+                        fontWeight: 600,
+                        cursor: draftLoading ? 'not-allowed' : 'pointer',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '6px',
+                        opacity: draftLoading ? 0.7 : 1,
+                        transition: 'transform 0.1s ease',
+                        boxShadow: '0 2px 10px rgba(236, 72, 153, 0.3)'
+                      }}
+                      onMouseDown={(e) => !draftLoading && (e.currentTarget.style.transform = 'scale(0.96)')}
+                      onMouseUp={(e) => !draftLoading && (e.currentTarget.style.transform = 'scale(1)')}
+                      onMouseLeave={(e) => !draftLoading && (e.currentTarget.style.transform = 'scale(1)')}
+                    >
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="7.5 4.21 12 6.81 16.5 4.21"></polyline><polyline points="7.5 19.79 7.5 14.6 3 12"></polyline><polyline points="21 12 16.5 14.6 16.5 19.79"></polyline><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>
+                      {draftLoading ? 'Generating...' : 'Auto-Draft'}
+                    </button>
+                  )}
+
+                  <button 
+                    type="submit" 
+                    disabled={isUpdating || (!commentText.trim() && !selectedFile)}
+                    style={{
+                      background: isCustomer || replyType === 'public' ? '#10b981' : 'var(--primary)',
+                      color: 'white',
                       border: 'none',
+                      padding: '8px 20px',
+                      borderRadius: '9999px',
+                      fontSize: '0.85rem',
+                      fontWeight: 600,
+                      cursor: (isUpdating || (!commentText.trim() && !selectedFile)) ? 'not-allowed' : 'pointer',
                       display: 'flex',
                       alignItems: 'center',
-                      gap: '6px'
+                      gap: '6px',
+                      opacity: (isUpdating || (!commentText.trim() && !selectedFile)) ? 0.5 : 1,
+                      transition: 'all 0.2s ease',
+                      boxShadow: isCustomer || replyType === 'public' ? '0 2px 10px rgba(16, 185, 129, 0.3)' : '0 2px 10px rgba(79, 70, 229, 0.3)'
                     }}
-                    onClick={handleGenerateDraft}
-                    disabled={draftLoading}
                   >
-                    {draftLoading ? 'Generating...' : '🪄 Auto-Draft'}
+                    {isUpdating ? 'Saving...' : (
+                      <>
+                        {isCustomer || replyType === 'public' ? 'Send Reply' : 'Add Note'}
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+                      </>
+                    )}
                   </button>
-                )}
-
-                <button 
-                  type="submit" 
-                  className="btn" 
-                  style={{
-                    background: isCustomer || replyType === 'public' ? '#10b981' : 'var(--primary)',
-                    color: 'white',
-                    border: 'none'
-                  }}
-                  disabled={isUpdating || (!commentText.trim() && !selectedFile)}
-                >
-                  {isUpdating ? 'Saving...' : (isCustomer || replyType === 'public' ? 'Send Reply' : 'Add Note')}
-                </button>
+                </div>
               </div>
             </form>
           </div>
