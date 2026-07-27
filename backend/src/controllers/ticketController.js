@@ -11,18 +11,6 @@ exports.createTicket = async (req, res) => {
   try {
     const { title, description } = req.body;
     
-    // Step 1: Use AI to analyze the ticket
-    const aiAnalysis = await analyzeTicket(title, description, req.user.organizationId);
-
-    // Feature 2: Sentiment Priority Override
-    // If the customer is very angry, frustrated, or urgent, force priority to critical
-    let finalPriority = aiAnalysis.priority || 'medium';
-    const badSentiments = ['frustrated', 'angry', 'upset', 'furious', 'urgent', 'critical'];
-    if (aiAnalysis.sentiment && badSentiments.some(s => aiAnalysis.sentiment.toLowerCase().includes(s))) {
-      finalPriority = 'critical';
-      aiAnalysis.category = 'Escalation'; // Optional: force category too
-    }
-
     // Feature 4: Smart AI Auto-Assignment
     // Find an available admin or support_agent in the same organization
     const availableAgents = await User.find({
@@ -31,39 +19,35 @@ exports.createTicket = async (req, res) => {
       isActive: true,
     });
     
-    // Pick a random agent, or we could match based on category. Let's just pick a random one for now.
     let assignedAgentId = null;
     if (availableAgents.length > 0) {
       const randomIndex = Math.floor(Math.random() * availableAgents.length);
       assignedAgentId = availableAgents[randomIndex]._id;
     }
 
-    // Step 2: Calculate SLA deadlines based on AI-determined priority
-    const slaDeadlines = getSLADeadlines(finalPriority);
+    // Auto-assign to the only admin in the system (Fallback)
+    const admin = await User.findOne({ role: 'admin', organizationId: req.user.organizationId });
+    if (admin && !assignedAgentId) {
+      assignedAgentId = admin._id;
+    }
 
-    // Step 3: Create ticket in DB
+    // Step 3: Create ticket in DB immediately to prevent blocking
     const newTicket = new Ticket({
       title,
       description,
       creatorId: req.user.userId,
       organizationId: req.user.organizationId,
-      category: aiAnalysis.category,
-      priority: finalPriority,
+      category: 'General', // Default, AI will update
+      priority: 'medium', // Default, AI will update
       agentId: assignedAgentId,
       aiInsights: {
-        sentiment: aiAnalysis.sentiment,
-        suggestedResolution: aiAnalysis.suggestedResolution,
+        sentiment: 'neutral',
+        suggestedResolution: '',
       },
-      sla: slaDeadlines,
-      initialAiCategory: aiAnalysis.category,
-      initialAiPriority: aiAnalysis.priority,
+      sla: getSLADeadlines('medium'),
+      initialAiCategory: 'General',
+      initialAiPriority: 'medium',
     });
-
-    // Auto-assign to the only admin in the system
-    const admin = await User.findOne({ role: 'admin', organizationId: req.user.organizationId });
-    if (admin) {
-      newTicket.agentId = admin._id;
-    }
 
     // Add first comment
     newTicket.comments.push({
@@ -86,18 +70,59 @@ exports.createTicket = async (req, res) => {
       emailService.sendTicketCreatedEmail(creator.email, newTicket.title, newTicket.id).catch(err => console.error(err));
     }
 
+    // RETURN RESPONSE IMMEDIATELY (Fixes latency)
     res.status(201).json(newTicket);
 
-    // Feature: AI First Responder Auto-Reply
-    // Do this asynchronously so we don't block the response
-    if (!title.startsWith('Escalation:')) {
-      (async () => {
+    // ==========================================
+    // ASYNC AI BACKGROUND PROCESSING
+    // ==========================================
+    (async () => {
+      try {
+        // AI Triage & Sentiment Analysis
+        const aiAnalysis = await analyzeTicket(title, description, req.user.organizationId);
+
+        let finalPriority = aiAnalysis.priority || 'medium';
+        const badSentiments = ['frustrated', 'angry', 'upset', 'furious', 'urgent', 'critical'];
+        if (aiAnalysis.sentiment && badSentiments.some(s => aiAnalysis.sentiment.toLowerCase().includes(s))) {
+          finalPriority = 'critical';
+          aiAnalysis.category = 'Escalation'; 
+        }
+
+        const slaDeadlines = getSLADeadlines(finalPriority);
+
+        const updatedTicket = await Ticket.findOneAndUpdate(
+          { _id: newTicket._id },
+          {
+            $set: {
+              category: aiAnalysis.category || 'General',
+              priority: finalPriority,
+              sla: slaDeadlines,
+              initialAiCategory: aiAnalysis.category || 'General',
+              initialAiPriority: finalPriority,
+              'aiInsights.sentiment': aiAnalysis.sentiment,
+              'aiInsights.suggestedResolution': aiAnalysis.suggestedResolution
+            }
+          },
+          { new: true }
+        )
+        .populate('agentId', 'name email')
+        .populate('creatorId', 'name email')
+        .populate('comments.author', 'name role');
+
         try {
+          getIo().emit('ticket_updated', updatedTicket);
+          getIo().to(`ticket_${newTicket._id}`).emit('ticket_updated', updatedTicket);
+        } catch (e) {
+          console.error('Socket emit failed for AI Triage', e);
+        }
+
+        // Feature: AI First Responder Auto-Reply
+        if (!title.startsWith('Escalation:')) {
           const solution = await generateDeflection(title, description, req.user.organizationId);
           if (solution) {
             const aiContent = `Hello! I'm ResolveBot, your AI Support Assistant. Based on our knowledge base, here is a potential solution to your issue:\n\n${solution}\n\nDid this resolve your issue?`;
             
-            const updatedTicket = await Ticket.findOneAndUpdate(
+            const autoReplyTicket = await Ticket.findOneAndUpdate(
               { _id: newTicket._id },
               {
                 $push: {
@@ -115,17 +140,17 @@ exports.createTicket = async (req, res) => {
               .populate('comments.author', 'name role');
 
             try {
-              getIo().to(`ticket_${newTicket._id}`).emit('comment_added', updatedTicket);
+              getIo().to(`ticket_${newTicket._id}`).emit('comment_added', autoReplyTicket);
             } catch (e) {
               console.error('Socket emit failed for AI auto-reply', e);
             }
           }
-        } catch (err) {
-          console.error('AI First Responder failed:', err);
         }
-      })();
-    }
-    
+      } catch (err) {
+        console.error('AI Processing failed:', err);
+      }
+    })();
+
   } catch (error) {
     res.status(500).json({ message: 'Failed to create ticket', error: error.message });
   }
