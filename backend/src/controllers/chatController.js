@@ -147,7 +147,7 @@ exports.escalateConversation = async (req, res) => {
     await ticket.save();
 
     // Emit global push notification
-    getIo().emit('ticket_created', ticket);
+    getIo().emit('ticket_created', { id: ticket._id, title: ticket.title });
 
     res.status(201).json({ message: 'Escalated to ticket successfully', ticketId: ticket._id });
   } catch (error) {

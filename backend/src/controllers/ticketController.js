@@ -75,7 +75,7 @@ exports.createTicket = async (req, res) => {
     await newTicket.save();
 
     // Emit global push notification
-    getIo().emit('ticket_created', newTicket);
+    getIo().emit('ticket_created', { id: newTicket._id, title: newTicket.title });
 
     // Populate agent if assigned (currently unassigned by default)
     await newTicket.populate('agentId', 'name email');
